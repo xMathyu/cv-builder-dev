@@ -1,6 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CV Builder App
 
-## Getting Started
+A modern, responsive CV builder application built with Next.js, TypeScript, and Tailwind CSS. Create professional CVs with real-time preview and export to PDF functionality.
+
+## 🚀 Features
+
+### ✅ Completed Features
+- **Professional CV Preview**: Real-time rendering of your CV with modern design
+- **PDF Export**: High-quality PDF generation with multiple format options (A4, Letter)
+- **Image Export**: Export CV as PNG or JPEG images
+- **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
+- **TypeScript Integration**: Full type safety and better development experience
+- **Theme System**: Professional blue theme with easy customization
+- **ATS-Friendly**: Optimized for Applicant Tracking Systems
+
+### 🔄 Export Options
+- **PDF Formats**: A4 and Letter size support
+- **Image Formats**: PNG and JPEG export
+- **High Quality**: 2x scale rendering for crisp output
+- **Progress Tracking**: Real-time export progress with visual feedback
+- **Metadata**: Proper PDF metadata for better organization
+
+### 📋 CV Sections
+- Personal Information (Name, Contact, Summary)
+- Professional Experience with achievements
+- Education background
+- Technical Skills organized by category
+- Featured Projects with technologies
+- Certifications and Awards
+- Languages with proficiency levels
+
+## 🛠️ Technologies Used
+
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **PDF Generation**: jsPDF + html2canvas
+- **Icons**: Lucide React
+- **State Management**: React Context + useReducer
+- **Forms**: React Hook Form + Zod validation (planned)
+- **Animations**: Framer Motion (installed, ready to use)
+
+## 🚀 Getting Started
 
 First, run the development server:
 
