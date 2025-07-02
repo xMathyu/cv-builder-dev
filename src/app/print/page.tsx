@@ -20,6 +20,8 @@ export default function PrintPage() {
         body {
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
         
         /* Ocultar elementos no necesarios para impresión */
@@ -28,10 +30,24 @@ export default function PrintPage() {
         }
       }
       
+      /* Eliminar márgenes y padding de la página de impresión */
+      body {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      
+      .min-h-screen {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      
       /* Forzar layout de 2 columnas en la página de impresión */
       #cv-preview {
         max-width: none !important;
         width: 100% !important;
+        margin: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
       }
       
       #cv-preview .grid {
@@ -107,11 +123,9 @@ export default function PrintPage() {
           </div>
         </header>
 
-        {/* CV Content - Replica exactamente la estructura de la página principal */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
-            <CVPreview />
-          </div>
+        {/* CV Content - Sin márgenes para aprovechar todo el espacio */}
+        <main>
+          <CVPreview />
         </main>
 
         {/* Instrucciones para el usuario (ocultas en impresión) */}
