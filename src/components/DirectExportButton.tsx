@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import { Download, Loader2 } from "lucide-react";
-import { usePDFExport } from "@/hooks/usePDFExport";
+import { useDirectPDFExport } from "@/hooks/useDirectPDFExport";
 
-const ExportButton: React.FC = () => {
-  const { exportToPDF } = usePDFExport();
+const DirectExportButton: React.FC = () => {
+  const { exportToPDF } = useDirectPDFExport();
   const [isExporting, setIsExporting] = useState(false);
   const [message, setMessage] = useState<{
     type: "success" | "error";
@@ -20,12 +20,12 @@ const ExportButton: React.FC = () => {
       await exportToPDF();
       setMessage({
         type: "success",
-        text: "¡PDF exportado exitosamente! En el diálogo de impresión: 1) Selecciona 'Guardar como PDF', 2) Ve a 'Más configuraciones', 3) Desactiva 'Encabezados y pies de página'. El PDF usará un tamaño de página personalizado (11x14 pulgadas) para que todo quepa en una sola hoja.",
+        text: "¡PDF generado y descargado exitosamente! Se ha creado un PDF de 11x14 pulgadas con todo el contenido en una sola página.",
       });
     } catch (error) {
       setMessage({
         type: "error",
-        text: error instanceof Error ? error.message : "Error al exportar PDF",
+        text: error instanceof Error ? error.message : "Error al generar PDF",
       });
     } finally {
       setIsExporting(false);
@@ -39,22 +39,22 @@ const ExportButton: React.FC = () => {
       <button
         onClick={handleExportPDF}
         disabled={isExporting}
-        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
       >
         {isExporting ? (
           <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           <Download className="w-4 h-4" />
         )}
-        {isExporting ? "Exportando..." : "Exportar PDF"}
+        {isExporting ? "Generando PDF..." : "Descargar PDF Directo"}
       </button>
 
       {message && (
         <div
-          className={`mt-2 p-2 rounded text-sm ${
+          className={`mt-2 p-3 rounded-lg text-sm ${
             message.type === "success"
-              ? "bg-green-100 text-green-700 border border-green-300"
-              : "bg-red-100 text-red-700 border border-red-300"
+              ? "bg-green-100 text-green-800 border border-green-200"
+              : "bg-red-100 text-red-800 border border-red-200"
           }`}
         >
           {message.text}
@@ -64,4 +64,4 @@ const ExportButton: React.FC = () => {
   );
 };
 
-export default ExportButton;
+export default DirectExportButton;

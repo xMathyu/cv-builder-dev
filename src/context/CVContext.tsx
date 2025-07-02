@@ -28,6 +28,7 @@ type CVAction =
     }
   | { type: "DELETE_EDUCATION"; payload: string }
   | { type: "ADD_SKILL"; payload: Skill }
+  | { type: "TOGGLE_FULLSCREEN" }
   | { type: "UPDATE_SKILL"; payload: { id: string; data: Partial<Skill> } }
   | { type: "DELETE_SKILL"; payload: string }
   | { type: "ADD_PROJECT"; payload: Project }

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
+    "@types/html2canvas": "^0.5.35",
     "framer-motion": "^12.18.1",
     "html2canvas": "^1.4.1",
     "jspdf": "^3.0.1",

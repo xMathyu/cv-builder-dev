@@ -39,19 +39,56 @@ export const usePDFExport = () => {
 
   const handlePrint = useReactToPrint({
     contentRef,
-    documentTitle: "CV",
+    documentTitle: " ", // Space character to minimize header
     onBeforePrint: async () => {
       await preloadImages();
       // Add a small delay to ensure DOM updates are rendered
       await new Promise((resolve) => setTimeout(resolve, 200));
     },
+    suppressErrors: true,
     pageStyle: `
       @page {
-        size: A4;
-        margin: 0.5in;
+        size: 11in 14in;
+        margin: 0.1in;
+        /* Completely remove headers and footers */
+        @top-left-corner { content: ""; }
+        @top-left { content: ""; }
+        @top-center { content: ""; }
+        @top-right { content: ""; }
+        @top-right-corner { content: ""; }
+        @bottom-left-corner { content: ""; }
+        @bottom-left { content: ""; }
+        @bottom-center { content: ""; }
+        @bottom-right { content: ""; }
+        @bottom-right-corner { content: ""; }
       }
       
       @media print {
+        /* Aggressive header/footer removal */
+        @page :first {
+          @top-left { content: ""; }
+          @top-center { content: ""; }
+          @top-right { content: ""; }
+          @bottom-left { content: ""; }
+          @bottom-center { content: ""; }
+          @bottom-right { content: ""; }
+        }
+        
+        /* Hide all potential header/footer content */
+        html::before, html::after,
+        body::before, body::after {
+          display: none !important;
+          content: none !important;
+        }
+        
+        /* Remove browser default headers/footers */
+        html {
+          margin: 0 !important;
+          padding: 0 !important;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        
         body {
           margin: 0;
           padding: 0;
@@ -74,25 +111,34 @@ export const usePDFExport = () => {
           min-height: auto !important;
         }
         
-        /* CRITICAL: Force the grid layout to use desktop layout */
+        /* CRITICAL: Force the grid layout to use desktop layout with better proportions */
         .grid-cols-1 {
-          grid-template-columns: 1fr 2fr !important;
+          grid-template-columns: 35% 65% !important;
           display: grid !important;
+          gap: 0 !important;
+          width: 100% !important;
         }
         
-        /* Ensure responsive classes work as desktop */
+        /* Ensure responsive classes work as desktop with percentage-based layout */
         .lg\\:grid-cols-3 {
-          grid-template-columns: 1fr 2fr !important;
+          grid-template-columns: 35% 65% !important;
           display: grid !important;
+          gap: 0 !important;
+          width: 100% !important;
         }
         
-        /* Force column spans */
+        /* Force column spans with percentage widths */
         .lg\\:col-span-1 {
           grid-column: 1 / 2 !important;
+          width: 100% !important;
+          max-width: none !important;
         }
         
         .lg\\:col-span-2 {
           grid-column: 2 / 3 !important;
+          width: 100% !important;
+          max-width: none !important;
+          padding-right: 0 !important;
         }
         
         /* Ensure all images are visible and maintain aspect ratio */
@@ -129,36 +175,111 @@ export const usePDFExport = () => {
           all: unset !important;
         }
         
-        /* Ensure text sizes remain consistent */
-        .text-3xl { font-size: 1.875rem !important; }
-        .text-2xl { font-size: 1.5rem !important; }
-        .text-xl { font-size: 1.25rem !important; }
-        .text-lg { font-size: 1.125rem !important; }
-        .text-base { font-size: 1rem !important; }
-        .text-sm { font-size: 0.875rem !important; }
-        .text-xs { font-size: 0.75rem !important; }
+        /* Ensure text sizes remain consistent but optimized for larger page */
+        .text-3xl { font-size: 1.6rem !important; }
+        .text-2xl { font-size: 1.3rem !important; }
+        .text-xl { font-size: 1.1rem !important; }
+        .text-lg { font-size: 1rem !important; }
+        .text-base { font-size: 0.9rem !important; }
+        .text-sm { font-size: 0.8rem !important; }
+        .text-xs { font-size: 0.7rem !important; }
         
-        /* Ensure padding/margins are preserved */
-        .p-8 { padding: 2rem !important; }
-        .p-6 { padding: 1.5rem !important; }
-        .mb-8 { margin-bottom: 2rem !important; }
-        .mb-6 { margin-bottom: 1.5rem !important; }
-        .mb-4 { margin-bottom: 1rem !important; }
-        .mb-2 { margin-bottom: 0.5rem !important; }
+        /* Ensure padding/margins are preserved but optimized for larger page */
+        .p-8 { padding: 0.6rem !important; }
+        .p-6 { padding: 0.5rem !important; }
+        .mb-8 { margin-bottom: 0.4rem !important; }
+        .mb-6 { margin-bottom: 0.3rem !important; }
+        .mb-4 { margin-bottom: 0.2rem !important; }
+        .mb-2 { margin-bottom: 0.15rem !important; }
         
-        /* Profile image specific */
-        .w-32 { width: 8rem !important; }
-        .h-32 { height: 8rem !important; }
+        /* Optimize the main content area - ultra minimal padding */
+        .lg\\:col-span-2 .p-8 {
+          padding: 0.4rem 0.3rem 0.4rem 0.4rem !important;
+        }
         
-        /* Ensure proper spacing */
-        .space-y-3 > * + * { margin-top: 0.75rem !important; }
-        .space-y-2 > * + * { margin-top: 0.5rem !important; }
-        .space-y-4 > * + * { margin-top: 1rem !important; }
+        /* Optimize sidebar padding */
+        .lg\\:col-span-1 .p-8 {
+          padding: 0.4rem !important;
+        }
         
-        /* Flex gap alternatives */
-        .gap-2 { gap: 0.5rem !important; }
-        .gap-3 { gap: 0.75rem !important; }
-        .gap-4 { gap: 1rem !important; }
+        /* Profile image specific - smaller for single page */
+        .w-32 { width: 5rem !important; }
+        .h-32 { height: 5rem !important; }
+        
+        /* Ensure proper spacing - ultra compact for single page */
+        .space-y-3 > * + * { margin-top: 0.2rem !important; }
+        .space-y-2 > * + * { margin-top: 0.15rem !important; }
+        .space-y-4 > * + * { margin-top: 0.25rem !important; }
+        
+        /* Flex gap alternatives - ultra compact */
+        .gap-2 { gap: 0.15rem !important; }
+        .gap-3 { gap: 0.2rem !important; }
+        .gap-4 { gap: 0.25rem !important; }
+        
+        /* Force full width usage - remove any centering or max-width constraints */
+        .container, .max-w-full, .max-w-screen-xl, .max-w-7xl, .max-w-6xl, .max-w-5xl {
+          max-width: none !important;
+          width: 100% !important;
+          margin: 0 !important;
+        }
+        
+        /* Remove any auto margins that create centering */
+        .mx-auto, .ml-auto, .mr-auto {
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+        }
+        
+        /* Ensure all divs use full available space */
+        div {
+          box-sizing: border-box !important;
+        }
+        
+        /* Specific spacing fixes for CV sections - ultra compact for single page */
+        section {
+          margin-bottom: 0.3rem !important;
+        }
+        
+        /* Reduce spacing in experience and education cards */
+        .bg-gray-50 {
+          margin-bottom: 0.2rem !important;
+          padding: 0.4rem !important;
+        }
+        
+        /* Compact list items */
+        li {
+          margin-bottom: 0.1rem !important;
+          line-height: 1.2 !important;
+        }
+        
+        /* Reduce spacing in skill tags */
+        .flex-wrap > * {
+          margin-bottom: 0.1rem !important;
+        }
+        
+        /* Compact borders between sections */
+        .border-b-2 {
+          margin-bottom: 0.2rem !important;
+          padding-bottom: 0.15rem !important;
+        }
+        
+        /* Force single page - prevent page breaks */
+        * {
+          page-break-inside: avoid !important;
+          break-inside: avoid !important;
+        }
+        
+        /* Scale down if content is too long but less aggressive with larger page */
+        #cv-preview {
+          transform-origin: top left;
+          transform: scale(0.95);
+          width: 105.26% !important;
+        }
+        
+        /* Compact skill tags and technology items */
+        .bg-blue-700, .text-xs {
+          padding: 0.1rem 0.3rem !important;
+          font-size: 0.6rem !important;
+        }
       }
     `,
   });
